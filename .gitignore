@@ -7,3 +7,5 @@ rest-project/target/classes/es/cic/curso/vuerest/service/ItemService.class
 rest-project/target/test-classes/es/cic/curso/vuerest/VuerestApplicationTests.class
 rest-project/target/classes/es/cic/curso/vuerest/service/ItemService.class
 rest-project/target/classes/es/cic/curso/vuerest/model/Item.class
+vue-project/node_modules
+rest-project/target/classes/es/cic/curso/vuerest/repository/CategoryRepository.class
