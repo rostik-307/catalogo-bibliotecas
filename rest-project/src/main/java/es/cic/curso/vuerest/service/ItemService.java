@@ -23,8 +23,8 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    public long crearItem(String name, String details, int releaseYear) {
-        Item item = new Item(name, details, releaseYear);
+    public long crearItem(String name, String details, int releaseYear, int categoryId) {
+        Item item = new Item(name, details, releaseYear, categoryId);
         itemRepository.save(item);
         return item.getId();
     }
