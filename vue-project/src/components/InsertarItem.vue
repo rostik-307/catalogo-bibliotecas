@@ -22,6 +22,9 @@
       <label for="itemDetails">Detalles del {{ tipoSeleccionado }}:</label>
       <input id="itemDetails" v-model="nuevoItem.details" />
 
+      <label for="releaseYear">Año de lanzamiento:</label>
+      <input id="releaseYear" v-model="nuevoItem.releaseYear" type="number" placeholder="Ingrese el año de lanzamiento" />
+
       <label for="categoriaId">ID de la Categoría:</label>
       <input id="categoriaId" v-model="nuevoItem.id_cat" placeholder="Ingrese el ID de la categoría" />
 
@@ -34,6 +37,7 @@
         <p>ID: {{ itemCreado.id }}</p>
         <p>Nombre: {{ itemCreado.name }}</p>
         <p>Detalles: {{ itemCreado.details }}</p>
+        <p>Año de lanzamiento: {{ itemCreado.releaseYear }}</p>
         <p>ID de Categoría: {{ itemCreado.id_cat }}</p>
       </div>
     </div>
@@ -46,7 +50,7 @@ import axios from 'axios';
 
 // Variables reactivas
 const tipoSeleccionado = ref(''); // Tipo de ítem seleccionado
-const nuevoItem = ref({ name: '', details: '', id_cat: '' });
+const nuevoItem = ref({ name: '', details: '', releaseYear: '', id_cat: '' });
 const itemCreado = ref(null); // Almacena los datos del ítem creado
 
 // Función para cambiar el tipo de ítem
@@ -65,7 +69,7 @@ const añadirItem = () => {
     .then(response => {
       console.log(`${tipoSeleccionado.value} añadido correctamente:`, response.data);
       // Limpia el formulario tras la creación
-      nuevoItem.value = { name: '', details: '', id_cat: '' };
+      nuevoItem.value = { name: '', details: '', releaseYear: '', id_cat: '' };
       itemCreado.value = response.data;
     })
     .catch(error => {
@@ -75,7 +79,7 @@ const añadirItem = () => {
 
 // Función para resetear el formulario de ítem
 const resetFormularioItem = () => {
-  nuevoItem.value = { name: '', details: '', id_cat: '' }; // Limpia el formulario
+  nuevoItem.value = { name: '', details: '', releaseYear: '', id_cat: '' }; // Limpia el formulario
 };
 </script>
 
