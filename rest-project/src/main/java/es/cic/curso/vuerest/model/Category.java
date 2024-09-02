@@ -17,7 +17,8 @@ public class Category {
     public Category() {
     }
 
-    public Category(String name, String details, int annoNacimiento) {
+    public Category(Long id, String name, String details) {
+        this.id = id;  
         this.name = name;
         this.details = details;
     }
