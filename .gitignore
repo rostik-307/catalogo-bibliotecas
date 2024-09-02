@@ -1,0 +1,7 @@
+rest-project/target/classes/es/cic/curso/vuerest/VuerestApplication.class
+rest-project/target/classes/es/cic/curso/vuerest/controller/ItemController.class
+rest-project/target/classes/es/cic/curso/vuerest/model/Category.class
+rest-project/target/classes/es/cic/curso/vuerest/repository/ItemRepository.class
+rest-project/target/classes/es/cic/curso/vuerest/model/Item.class
+rest-project/target/classes/es/cic/curso/vuerest/service/ItemService.class
+rest-project/target/test-classes/es/cic/curso/vuerest/VuerestApplicationTests.class

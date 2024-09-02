@@ -13,7 +13,7 @@ import es.cic.curso.vuerest.repository.ItemRepository;
 public class ItemService {
 
     @Autowired
-    Item itemRepository;
+    ItemRepository itemRepository;
 
     public List<Item> findAll() {
         return itemRepository.findAll();
@@ -23,14 +23,14 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    public long crearPersona(String nombre, String apellidos, int annoNacimiento) {
-        Item persona = new Item(nombre, apellidos, annoNacimiento);
-        itemRepository.save(persona);
-        return persona.getId();
+    public long crearItem(String name, String details, int releaseYear) {
+        Item item = new Item(name, details, releaseYear);
+        itemRepository.save(item);
+        return item.getId();
     }
 
-    public Item save(Item persona) {
-        return itemRepository.save(persona);
+    public Item save(Item item) {
+        return itemRepository.save(item);
     }
 
     public void deleteById(Long id) {

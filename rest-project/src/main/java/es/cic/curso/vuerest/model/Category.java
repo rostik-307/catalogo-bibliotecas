@@ -6,28 +6,28 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Item {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String details;
-    private int releaseYear;
-    private Long categoriaId;
 
-    public Item() {
+    public Category() {
     }
 
-    public Item(String name, String details, int releaseYear, Long categoriaId) {
+    public Category(String name, String details, int annoNacimiento) {
         this.name = name;
         this.details = details;
-        this.releaseYear = releaseYear;
-        this.categoriaId = categoriaId;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -46,11 +46,5 @@ public class Item {
         this.details = details;
     }
 
-    public int getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
-    }
+    
 }
