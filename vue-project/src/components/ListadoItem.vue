@@ -6,7 +6,7 @@
       <input
         type="text"
         v-model="searchQuery"
-        placeholder="Search for an item..."
+        placeholder="Búsqueda para item..."
         @input="filterItems"
       />
   
