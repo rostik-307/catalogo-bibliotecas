@@ -1,0 +1,6 @@
+es/cic/curso/vuerest/model/Item.class
+es/cic/curso/vuerest/VuerestApplication.class
+es/cic/curso/vuerest/repository/ItemRepository.class
+es/cic/curso/vuerest/service/ItemService.class
+es/cic/curso/vuerest/controller/ItemController.class
+es/cic/curso/vuerest/model/Category.class
