@@ -1,6 +1,6 @@
 /home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/VuerestApplication.java
-/home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/controller/ExampleController.java
-/home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/model/Categoria.java
+/home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/controller/ItemController.java
+/home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/model/Category.java
 /home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/model/Item.java
 /home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/repository/ItemRepository.java
 /home/curso02/catalogo-bibliotecas/rest-project/src/main/java/es/cic/curso/vuerest/service/ItemService.java
