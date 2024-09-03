@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import es.cic.curso.vuerest.model.Item;
 import es.cic.curso.vuerest.service.ItemService;
 
-
 @RestController
 @RequestMapping("/api/item")
 public class ItemController {
@@ -52,5 +51,20 @@ public class ItemController {
     @DeleteMapping("/{id}")
     public void deleteitem(@PathVariable Long id) {
         itemService.deleteById(id);
+    }
+
+    @PostMapping("/{id}/associate-category")
+    public Item associateCategory(@PathVariable Long id, @RequestBody Long categoryId) {
+        // Encontrar el ítem por su ID
+        Optional<Item> optionalItem = itemService.findById(id);
+
+        if (optionalItem.isPresent()) {
+            Item item = optionalItem.get();
+
+            item.setCategoryId(categoryId);
+            return itemService.save(item);
+        } else {
+            return null;
+        }
     }
 }
