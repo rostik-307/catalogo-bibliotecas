@@ -1,44 +1,44 @@
 <template>
   <div class="item">
-    <!-- Combo para seleccionar el tipo de ítem -->
-    <div class="combo-accion">
-      <label for="tipoItem">Seleccionar tipo de ítem:</label>
-      <select id="tipoItem" v-model="tipoSeleccionado" @change="cambiarATipo">
-        <option value="">Seleccione un tipo</option>
-        <option value="CD">Insertar CD</option>
-        <option value="VHS">Insertar VHS</option>
-        <option value="Libro">Insertar Libro</option>
-        <option value="Revista">Insertar Revista</option>
-      </select>
-    </div>
-
     <!-- Formulario para crear el ítem -->
-    <div v-if="tipoSeleccionado">
-      <h2>Crear {{ tipoSeleccionado }}</h2>
+    <div>
+      <h2>Crear Ítem</h2>
 
-      <label for="itemName">Nombre del {{ tipoSeleccionado }}:</label>
+      <label for="itemName">Nombre del Ítem:</label>
       <input id="itemName" v-model="nuevoItem.name" />
 
-      <label for="itemDetails">Detalles del {{ tipoSeleccionado }}:</label>
+      <label for="itemDetails">Detalles del Ítem:</label>
       <input id="itemDetails" v-model="nuevoItem.details" />
 
       <label for="releaseYear">Año de lanzamiento:</label>
       <input id="releaseYear" v-model="nuevoItem.releaseYear" type="number" placeholder="Ingrese el año de lanzamiento" />
 
-      <label for="categoriaId">ID de la Categoría:</label>
-      <input id="categoriaId" v-model="nuevoItem.id_cat" placeholder="Ingrese el ID de la categoría" />
-
-      <!-- Botón para añadir ítem -->
-      <button @click="añadirItem">Añadir {{ tipoSeleccionado }}</button>
+      <!-- Botón para crear el ítem -->
+      <button @click="crearItem">Crear Ítem</button>
 
       <!-- Mostrar los datos del ítem creado -->
       <div v-if="itemCreado">
-        <h3>{{ tipoSeleccionado }} Creado:</h3>
+        <h3>Ítem Creado:</h3>
         <p>ID: {{ itemCreado.id }}</p>
         <p>Nombre: {{ itemCreado.name }}</p>
         <p>Detalles: {{ itemCreado.details }}</p>
         <p>Año de lanzamiento: {{ itemCreado.releaseYear }}</p>
-        <p>ID de Categoría: {{ itemCreado.id_cat }}</p>
+      </div>
+    </div>
+
+    <!-- Formulario para asociar la categoría, se muestra solo si el ítem ha sido creado -->
+    <div v-if="itemCreado">
+      <h2>Asociar Categoría al Ítem (ID: {{ itemCreado.id }})</h2>
+
+      <label for="categoriaId">ID de la Categoría:</label>
+      <input id="categoriaId" v-model="categoria.id_cat" placeholder="Ingrese el ID de la categoría" />
+
+      <!-- Botón para añadir la categoría -->
+      <button @click="asociarCategoria">Asociar Categoría</button>
+
+      <!-- Mostrar mensaje de éxito o error -->
+      <div v-if="mensaje">
+        <p>{{ mensaje }}</p>
       </div>
     </div>
   </div>
@@ -49,37 +49,38 @@ import { ref } from 'vue';
 import axios from 'axios';
 
 // Variables reactivas
-const tipoSeleccionado = ref(''); // Tipo de ítem seleccionado
-const nuevoItem = ref({ name: '', details: '', releaseYear: '', id_cat: '' });
+const nuevoItem = ref({ name: '', details: '', releaseYear: '' });
 const itemCreado = ref(null); // Almacena los datos del ítem creado
+const categoria = ref({ id_cat: '' });
+const mensaje = ref(''); // Almacena mensajes de éxito o error
 
-// Función para cambiar el tipo de ítem
-const cambiarATipo = () => {
-  resetFormularioItem(); // Resetea el formulario cuando cambias de tipo
+// Función para crear el ítem
+const crearItem = async () => {
+  try {
+    const response = await axios.post('/api/items', nuevoItem.value);
+    itemCreado.value = response.data;
+    nuevoItem.value = { name: '', details: '', releaseYear: '' }; // Limpia el formulario de ítem
+    mensaje.value = ''; // Limpia cualquier mensaje anterior
+  } catch (error) {
+    console.error('Error al crear el ítem:', error);
+  }
 };
 
-// Función para añadir el ítem
-const añadirItem = () => {
-  if (!nuevoItem.value.id_cat) {
+// Función para asociar la categoría al ítem creado
+const asociarCategoria = async () => {
+  if (!categoria.value.id_cat) {
     alert('Por favor, ingrese el ID de la categoría.');
     return;
   }
 
-  axios.post(`/api/items`, nuevoItem.value)
-    .then(response => {
-      console.log(`${tipoSeleccionado.value} añadido correctamente:`, response.data);
-      // Limpia el formulario tras la creación
-      nuevoItem.value = { name: '', details: '', releaseYear: '', id_cat: '' };
-      itemCreado.value = response.data;
-    })
-    .catch(error => {
-      console.error(`Error al añadir ${tipoSeleccionado.value}:`, error);
-    });
-};
-
-// Función para resetear el formulario de ítem
-const resetFormularioItem = () => {
-  nuevoItem.value = { name: '', details: '', releaseYear: '', id_cat: '' }; // Limpia el formulario
+  try {
+    const response = await axios.post(`/api/items/${itemCreado.value.id}/associate-category`, categoria.value);
+    mensaje.value = 'Categoría asociada exitosamente.';
+    categoria.value.id_cat = ''; // Limpia el campo de categoría
+  } catch (error) {
+    mensaje.value = 'Error al asociar la categoría.';
+    console.error('Error al asociar la categoría:', error);
+  }
 };
 </script>
 
@@ -92,20 +93,23 @@ const resetFormularioItem = () => {
   margin-top: 5%;
 }
 
-.combo-accion {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-  width: 100%;
+label {
+  margin-top: 10px;
 }
 
-.combo-accion label {
-  margin-bottom: 10px;
+button {
+  margin-top: 20px;
 }
 
-.combo-accion select {
-  width: 100%;
-  padding: 10px;
+.mensaje {
+  color: green;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
 }
 </style>
