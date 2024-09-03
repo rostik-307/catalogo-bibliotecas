@@ -26,6 +26,7 @@ header{
 }
 
 .content{
+  margin-top: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,6 +34,49 @@ header{
   padding: 2em;
   border-radius: 1.3em;
   background-color: var(--color-background-soft);
+}
+
+
+input{
+  padding: 0.5em 1em;
+  border-radius: 1em;
+  background-color: var(--color-background-soft);
+  color: var(--color-text);
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  border-color: var(--color-background-soft);
+  border-width: 0.4em;
+}
+
+button{
+  padding: 0.5em 1em;
+  border-radius: 1em;
+  background-color: var(--color-text);
+  color: var(--color-background);
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  border-color: var(--color-background-soft);
+  border-width: 0.3em;
+}
+
+button:hover{
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2em;
+}
+
+td, th{
+  padding: 1em;
+  border: 1px solid var(--color-background-soft);
 }
 
 a,
