@@ -13,14 +13,7 @@
   </template>
   
   <style scoped>
-  .home{
-    display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-top: 13%;
-  margin-left: -100%;
-  }
+
   nav {
     display: flex;
     justify-content:center ;

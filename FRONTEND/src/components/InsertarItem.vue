@@ -92,12 +92,16 @@ const asociarCategoria = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%;
-  margin-top: 5%;
+  width: fit-content;
 }
 
 label {
   margin-top: 10px;
+  display: block;
+}
+
+input {
+  display: block;
 }
 
 button {

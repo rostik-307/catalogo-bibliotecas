@@ -25,6 +25,16 @@ header{
   top: 2em;
 }
 
+.content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  padding: 2em;
+  border-radius: 1.3em;
+  background-color: var(--color-background-soft);
+}
+
 a,
 .green {
   text-decoration: none;
