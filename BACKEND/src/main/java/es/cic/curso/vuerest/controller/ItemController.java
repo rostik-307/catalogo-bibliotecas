@@ -1,6 +1,7 @@
 package es.cic.curso.vuerest.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,7 +62,6 @@ public class ItemController {
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
 
-            item.setCategoryId(categoryId);
             return itemService.save(item);
         } else {
             return null;
