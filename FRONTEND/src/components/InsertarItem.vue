@@ -26,12 +26,18 @@
       </div>
     </div>
 
-    <!-- Formulario para asociar la categoría, se muestra solo si el ítem ha sido creado -->
-    <div v-if="itemCreado">
+  <!-- Formulario para asociar la categoría, se muestra solo si el ítem ha sido creado -->
+  <div v-if="itemCreado">
       <h2>Asociar Categoría al Ítem (ID: {{ itemCreado.id }})</h2>
 
-      <label for="categoriaId">ID de la Categoría:</label>
-      <input id="categoriaId" v-model="categoria.id_cat" placeholder="Ingrese el ID de la categoría" />
+      <label for="categoriaName">Nombre de la Categoría:</label>
+      <input id="categoriaName" v-model="categoria.name" placeholder="Ingrese el nombre de la categoría" />
+
+      <label for="categoriaDetails">Detalles de la Categoría:</label>
+      <input id="categoriaDetails" v-model="categoria.details" placeholder="Ingrese los detalles de la categoría" />
+
+      <label for="categoriaItemId">ID del Ítem:</label>
+      <input id="categoriaItemId" v-model="categoria.item_id" placeholder="Ingrese el ID del ítem" />
 
       <!-- Botón para añadir la categoría -->
       <button @click="asociarCategoria">Asociar Categoría</button>
