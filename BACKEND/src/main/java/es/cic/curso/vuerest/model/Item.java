@@ -18,6 +18,10 @@ public class Item {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    // Constructor predeterminado
+    public Item() {
+    }
+
     public Item(String name, String details, int releaseYear) {
         this.name = name;
         this.details = details;

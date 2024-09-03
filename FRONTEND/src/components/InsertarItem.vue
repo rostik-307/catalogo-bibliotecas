@@ -1,5 +1,6 @@
 <template>
   <div class="item">
+  </div>
     <!-- Formulario para crear el ítem -->
     <div>
       <h2>Crear Ítem</h2>
