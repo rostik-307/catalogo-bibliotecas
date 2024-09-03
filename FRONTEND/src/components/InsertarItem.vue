@@ -1,7 +1,6 @@
 <template>
   <div class="item">
-  </div>
-    <!-- Formulario para crear el ítem -->
+    <!-- Formulario para crear el ítem con la opción de seleccionar una categoría -->
     <div>
       <h2>Crear Ítem</h2>
 
@@ -9,10 +8,17 @@
       <input id="itemName" v-model="nuevoItem.name" />
 
       <label for="itemDetails">Detalles del Ítem:</label>
-      <input id="itemDetails" v-model="nuevoItem.details" />
+      <input id="itemDetails" v-model="nuevoItem.details" :disabled="itemCreado !== null" />
 
       <label for="releaseYear">Año de lanzamiento:</label>
       <input id="releaseYear" v-model="nuevoItem.releaseYear" type="number" placeholder="Ingrese el año de lanzamiento" />
+
+      <label for="categoriaId">Seleccione una Categoría:</label>
+      <select id="categoriaId" v-model="nuevoItem.categoriaId">
+        <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
+          {{ categoria.name }}
+        </option>
+      </select>
 
       <!-- Botón para crear el ítem -->
       <button @click="crearItem">Crear Ítem</button>
@@ -24,68 +30,57 @@
         <p>Nombre: {{ itemCreado.name }}</p>
         <p>Detalles: {{ itemCreado.details }}</p>
         <p>Año de lanzamiento: {{ itemCreado.releaseYear }}</p>
+        <p>Categoría: {{ itemCreado.categoria.name }}</p>
       </div>
-    </div>
 
-  <!-- Formulario para asociar la categoría, se muestra solo si el ítem ha sido creado -->
-  <div v-if="itemCreado">
-    <h2>Asociar Categoría al Ítem (ID: {{ itemCreado.id }})</h2>
-
-    <label for="categoriaId">Seleccione una Categoría:</label>
-    <select id="categoriaId" v-model="categoriaSeleccionada">
-      <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
-        {{ categoria.name }}
-      </option>
-    </select>
-
-    <!-- Botón para añadir la categoría -->
-    <button @click="asociarCategoria">Asociar Categoría</button>
-
-    <!-- Mostrar mensaje de éxito o error -->
-    <div v-if="mensaje">
-      <p>{{ mensaje }}</p>
+      <!-- Mostrar mensaje de éxito o error -->
+      <div v-if="mensaje">
+        <p>{{ mensaje }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 // Variables reactivas
-const nuevoItem = ref({ name: '', details: '', releaseYear: '' });
+const nuevoItem = ref({ name: '', details: '', releaseYear: '', categoriaId: '' });
 const itemCreado = ref(null); // Almacena los datos del ítem creado
-const categoria = ref({ id_cat: '' });
+const categorias = ref([]); // Almacena las categorías disponibles
 const mensaje = ref(''); // Almacena mensajes de éxito o error
 
-// Función para crear el ítem
-const crearItem = async () => {
+// Función para cargar las categorías desde el servidor
+const cargarCategorias = async () => {
   try {
-    const response = await axios.post('/api/item', nuevoItem.value);
-    itemCreado.value = response.data;
-    nuevoItem.value = { name: '', details: '', releaseYear: '' }; // Limpia el formulario de ítem
-    mensaje.value = ''; // Limpia cualquier mensaje anterior
+    const response = await axios.get('/api/category');
+    categorias.value = response.data;
   } catch (error) {
-    console.error('Error al crear el ítem:', error);
+    console.error('Error al cargar las categorías:', error);
   }
 };
 
-// Función para asociar la categoría al ítem creado
-const asociarCategoria = async () => {
-  if (!categoria.value.id_cat) {
-    alert('Por favor, ingrese el ID de la categoría.');
+// Función para crear el ítem y asociar la categoría seleccionada
+const crearItem = async () => {
+  if (!nuevoItem.value.categoriaId) {
+    alert('Por favor, seleccione una categoría.');
     return;
   }
 
   try {
-    const response = await axios.post(`/api/item/${itemCreado.value.id}/associate-category`, categoria.value);
-    mensaje.value = 'Categoría asociada exitosamente.';
-    categoria.value.id_cat = ''; // Limpia el campo de categoría
+    const response = await axios.post('/api/item', nuevoItem.value);
+    itemCreado.value = response.data;
+    mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
+    nuevoItem.value = { name: '', details: '', releaseYear: '', categoriaId: '' }; // Limpia el formulario de ítem
   } catch (error) {
-    mensaje.value = 'Error al asociar la categoría.';
-    console.error('Error al asociar la categoría:', error);
+    mensaje.value = 'Error al crear el ítem o asociar la categoría.';
+    console.error('Error al crear el ítem:', error);
   }
 };
+
+// Cargar las categorías cuando el componente se monta
+onMounted(cargarCategorias);
 </script>
 
 <style scoped>
@@ -101,8 +96,9 @@ label {
   display: block;
 }
 
-input {
+input, select {
   display: block;
+  margin-top: 5px;
 }
 
 button {
