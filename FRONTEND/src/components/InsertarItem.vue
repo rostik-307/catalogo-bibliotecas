@@ -57,7 +57,7 @@ const mensaje = ref(''); // Almacena mensajes de éxito o error
 // Función para crear el ítem
 const crearItem = async () => {
   try {
-    const response = await axios.post('/api/items', nuevoItem.value);
+    const response = await axios.post('/api/item', nuevoItem.value);
     itemCreado.value = response.data;
     nuevoItem.value = { name: '', details: '', releaseYear: '' }; // Limpia el formulario de ítem
     mensaje.value = ''; // Limpia cualquier mensaje anterior
@@ -74,7 +74,7 @@ const asociarCategoria = async () => {
   }
 
   try {
-    const response = await axios.post(`/api/items/${itemCreado.value.id}/associate-category`, categoria.value);
+    const response = await axios.post(`/api/item/${itemCreado.value.id}/associate-category`, categoria.value);
     mensaje.value = 'Categoría asociada exitosamente.';
     categoria.value.id_cat = ''; // Limpia el campo de categoría
   } catch (error) {

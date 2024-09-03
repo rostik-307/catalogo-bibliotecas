@@ -66,7 +66,7 @@ export default {
 
         const fetchItems = async () => {
             try {
-                const response = await axios.get('/api/items');
+                const response = await axios.get('/api/item');
                 items.value = response.data;
                 filteredItems.value = response.data;
             } catch (error) {
@@ -76,7 +76,7 @@ export default {
 
         const buscar = async () => {
             try {
-                const response = await axios.get(`/api/items/${searchId.value}`);
+                const response = await axios.get(`/api/item/${searchId.value}`);
                 filteredItems.value = [response.data]; // Mostrar solo el item buscado
             } catch (error) {
                 console.error('Error al buscar item:', error);
@@ -94,7 +94,7 @@ export default {
 
         const deleteItem = async (id) => {
             try {
-                await axios.delete(`/api/items/${id}`);
+                await axios.delete(`/api/item/${id}`);
                 fetchItems(); // Refresca la lista de items después de eliminar
             } catch (error) {
                 console.error('Error deleting item:', error);

@@ -16,14 +16,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/listado': {
+      '/api': {
         target: 'http://localhost:8080',  
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-      '/insertar': {
-        target: 'http://localhost:8080', 
         changeOrigin: true,
         secure: false,
         ws: true,
