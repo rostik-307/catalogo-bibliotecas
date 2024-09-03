@@ -16,6 +16,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference
     private Category category;
 
     // Constructor predeterminado
@@ -26,6 +27,7 @@ public class Item {
         this.name = name;
         this.details = details;
         this.releaseYear = releaseYear;
+
     }
 
     // Constructor con parámetros

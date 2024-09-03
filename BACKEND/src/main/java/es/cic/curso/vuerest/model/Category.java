@@ -15,6 +15,7 @@ public class Category {
     private String details;
 
     @OneToMany(mappedBy = "category", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
+    @JsonManagedReference
     private List<Item> items;
 
     // Constructor sin parámetros
