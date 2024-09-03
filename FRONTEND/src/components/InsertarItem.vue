@@ -28,24 +28,21 @@
 
   <!-- Formulario para asociar la categoría, se muestra solo si el ítem ha sido creado -->
   <div v-if="itemCreado">
-      <h2>Asociar Categoría al Ítem (ID: {{ itemCreado.id }})</h2>
+    <h2>Asociar Categoría al Ítem (ID: {{ itemCreado.id }})</h2>
 
-      <label for="categoriaName">Nombre de la Categoría:</label>
-      <input id="categoriaName" v-model="categoria.name" placeholder="Ingrese el nombre de la categoría" />
+    <label for="categoriaId">Seleccione una Categoría:</label>
+    <select id="categoriaId" v-model="categoriaSeleccionada">
+      <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
+        {{ categoria.name }}
+      </option>
+    </select>
 
-      <label for="categoriaDetails">Detalles de la Categoría:</label>
-      <input id="categoriaDetails" v-model="categoria.details" placeholder="Ingrese los detalles de la categoría" />
+    <!-- Botón para añadir la categoría -->
+    <button @click="asociarCategoria">Asociar Categoría</button>
 
-      <label for="categoriaItemId">ID del Ítem:</label>
-      <input id="categoriaItemId" v-model="categoria.item_id" placeholder="Ingrese el ID del ítem" />
-
-      <!-- Botón para añadir la categoría -->
-      <button @click="asociarCategoria">Asociar Categoría</button>
-
-      <!-- Mostrar mensaje de éxito o error -->
-      <div v-if="mensaje">
-        <p>{{ mensaje }}</p>
-      </div>
+    <!-- Mostrar mensaje de éxito o error -->
+    <div v-if="mensaje">
+      <p>{{ mensaje }}</p>
     </div>
   </div>
 </template>
