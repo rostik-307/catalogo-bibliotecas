@@ -11,18 +11,19 @@
   justify-content: center;
   height: 100%;
   text-align: center;
+  top: 0 !important;
+  margin-top: 110px;
 }
 
 header{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: fit-content;
-  padding: 2em;
-  border-radius: 1.3em;
-  background-color: var(--color-background-soft);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
   position: fixed;
-  top: 2em;
+  top: 0;
+  width: 100%;
 }
 
 .content{
