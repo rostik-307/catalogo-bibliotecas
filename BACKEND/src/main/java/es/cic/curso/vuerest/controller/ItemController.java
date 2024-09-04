@@ -63,7 +63,8 @@ public class ItemController {
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
             // Encontrar la categoría por su ID
-            Category category = categoryService.findById(categoryId).orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            Category category = categoryService.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
             // Asociar la categoría al ítem
             item.setCategory(category);
             return itemService.save(item);
