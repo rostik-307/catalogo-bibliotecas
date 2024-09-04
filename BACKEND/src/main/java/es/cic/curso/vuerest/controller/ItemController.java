@@ -9,6 +9,8 @@ import es.cic.curso.vuerest.model.Item;
 import es.cic.curso.vuerest.service.ItemService;
 import es.cic.curso.vuerest.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,24 +36,30 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDTO createItem(@RequestBody ItemDTO itemDTO) {
-        Item item = new Item();
-        item.setName(itemDTO.getName());
-        item.setDetails(itemDTO.getDetails());
-        item.setReleaseYear(itemDTO.getReleaseYear());
+    public ResponseEntity<?> createItem(@RequestBody ItemDTO itemDTO) {
+        try {
+            Item item = new Item();
+            item.setName(itemDTO.getName());
+            item.setDetails(itemDTO.getDetails());
+            item.setReleaseYear(itemDTO.getReleaseYear());
 
-        if (itemDTO.getCategoryId() != null) {
-            // Busca la categoría por ID
-            Category category = categoryService.findById(itemDTO.getCategoryId())
-                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-            item.setCategory(category); // Asocia la categoría al ítem
+            if (itemDTO.getCategoryId() != null) {
+                // Busca la categoría por ID
+                Category category = categoryService.findById(itemDTO.getCategoryId())
+                        .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+                item.setCategory(category); // Asocia la categoría al ítem
+            }
+
+            // Guarda el ítem con la categoría asociada
+            Item savedItem = itemService.save(item);
+
+            // Convierte el ítem guardado a DTO para devolverlo
+            return ResponseEntity.ok(ItemDTO.convertirEntidadADTO(savedItem));
+        } catch (Exception e) {
+            // Aquí puedes capturar y manejar la excepción
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear el ítem: " + e.getMessage());
         }
-
-        // Guarda el ítem con la categoría asociada
-        Item savedItem = itemService.save(item);
-
-        // Convierte el ítem guardado a DTO para devolverlo
-        return ItemDTO.convertirEntidadADTO(savedItem);
     }
 
     @PutMapping
