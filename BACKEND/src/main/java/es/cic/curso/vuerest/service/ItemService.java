@@ -44,7 +44,7 @@ public class ItemService {
         itemDTO.setDetails(item.getDetails());
         itemDTO.setReleaseYear(item.getReleaseYear());
         itemDTO.setCategoryId(item.getCategory().getId());
-        itemDTO.setCategoryName(item.getCategory().getName());
+        itemDTO.setCategory(item.getCategory().getName());
         return itemDTO;
     }
 }

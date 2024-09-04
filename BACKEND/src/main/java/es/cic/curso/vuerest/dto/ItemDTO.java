@@ -1,18 +1,13 @@
 package es.cic.curso.vuerest.dto;
 
+import es.cic.curso.vuerest.model.Item;
+
 public class ItemDTO {
 
     private Long id;
     private String name;
     private String details;
     private Integer releaseYear;
-    private Long categoryId;
-    private String categoryName;
-
-    private Long id;
-    private String name;
-    private String details;
-    private int releaseYear;
     private Long categoryId;
     private String categoryName;
 
@@ -57,12 +52,14 @@ public class ItemDTO {
         this.categoryId = categoryId;
     }
 
-    public String getCategoryName() {
+    public String getCategory() {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
+    public void setCategory(String categoryName) {
         this.categoryName = categoryName;
+    }
+    
     private ItemDTO convertirEntidadADTO(Item item) {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setId(item.getId());
