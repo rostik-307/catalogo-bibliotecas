@@ -209,14 +209,6 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-}
 
 .close {
     color: #aaa;
