@@ -48,6 +48,10 @@
                 <p><strong>Descripción:</strong> {{ selectedItem.details }}</p>
                 <p><strong>Año:</strong> {{ selectedItem.releaseYear }}</p>
                 <p><strong>Categoría:</strong> {{ selectedItem.category }}</p>
+                <p><strong>ID:</strong> {{ selectedItem.id }}</p>
+                <p><strong>Descripción:</strong> {{ selectedItem.details }}</p>
+                <p><strong>Año:</strong> {{ selectedItem.release_year }}</p>
+                <p><strong>Categoría:</strong> {{ selectedItem.category }}</p>
             </div>
         </div>
 

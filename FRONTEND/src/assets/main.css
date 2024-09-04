@@ -36,6 +36,21 @@ header{
   background-color: var(--color-background-soft);
 }
 
+.modal-content{
+  margin-top: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  padding: 2em;
+  border-radius: 1.3em;
+  background-color: var(--color-background-soft);
+}
+
+.modal-content,p{
+  margin-top: 1em;
+  display: block;
+}
 
 input{
   padding: 0.5em 1em;
@@ -49,6 +64,38 @@ input{
   transition: 0.3s;
   border-color: var(--color-background-soft);
   border-width: 0.4em;
+}
+
+select{
+  padding: 0.5em 1em;
+  margin: 0.2em;
+  border-radius: 1em;
+  background-color: var(--color-background-soft);
+  color: var(--color-text);
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  /* transition: 0.3s; */
+  border-color: var(--color-background-soft);
+  border-width: 0.4em;
+  width: 100%; 
+  
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+}
+
+input[type=number] { 
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0; 
+}
+
+select:focus{
+  outline: 0.2em solid lightblue;
 }
 
 button{
@@ -75,9 +122,18 @@ table{
   margin-top: 2em;
 }
 
+.detail-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2em;
+  border: 0.2em solid var(--color-text);
+  border-radius: 1em;
+}
+
 td, th{
   padding: 1em;
-  border: 1px solid var(--color-background-soft);
+  border-radius: 1em;
+  border: 0.2em;
 }
 
 a,
