@@ -1,4 +1,4 @@
-package main.java.es.cic.curso.vuerest.controller;
+package es.cic.curso.vuerest.controller;
 
 import main.java.es.cic.curso.vuerest.service.CategoryService;
 import main.java.es.cic.curso.vuerest.model.Category;
