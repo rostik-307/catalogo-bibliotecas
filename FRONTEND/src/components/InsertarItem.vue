@@ -30,7 +30,8 @@
         <p>Nombre: {{ itemCreado.name }}</p>
         <p>Detalles: {{ itemCreado.details }}</p>
         <p>Año de lanzamiento: {{ itemCreado.releaseYear }}</p>
-        <p>Categoría: {{ itemCreado.categoria.name }}</p>
+        <p v-if="itemCreado.categoria">Categoría: {{ itemCreado.categoria?.name }}</p>
+
       </div>
 
       <!-- Mostrar mensaje de éxito o error -->
@@ -69,7 +70,9 @@ const crearItem = async () => {
   }
 
   try {
+    console.log('Datos enviados al servidor:', nuevoItem.value);
     const response = await axios.post('/api/item', nuevoItem.value);
+
     itemCreado.value = response.data;
     mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
     nuevoItem.value = { name: '', details: '', releaseYear: '', categoriaId: '' }; // Limpia el formulario de ítem
