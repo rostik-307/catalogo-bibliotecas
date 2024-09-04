@@ -3,11 +3,7 @@
         <h1>Lista Item</h1>
 
         <!-- Caja de búsqueda por ID -->
-        <input
-            type="text"
-            v-model="searchId"
-            placeholder="Introduzca Id"
-        />
+        <input type="text" v-model="searchId" placeholder="Introduzca Id" />
         <button @click="buscar">Buscar</button>
         <button @click="resetear">Resetear</button>
 
@@ -28,7 +24,7 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.details }}</td>
                     <td>{{ item.releaseYear }}</td>
-                    <td>{{ item.category }}</td>
+                    <td>{{ item.categoryName }}</td>
                     <td>
                         <button @click="showDetails(item)">Ver Detalles</button>
                         <button @click="editItem(item)">Editar</button>
@@ -47,9 +43,10 @@
                 <p><strong>Nombre:</strong> {{ selectedItem.name }}</p>
                 <p><strong>Descripción:</strong> {{ selectedItem.details }}</p>
                 <p><strong>Año:</strong> {{ selectedItem.releaseYear }}</p>
-                <p><strong>Categoría:</strong> {{ selectedItem.category }}</p>
+                <p><strong>Categoría:</strong> {{ selectedItem.categoryName }}</p>
             </div>
         </div>
+
 
         <!-- Formulario de edición -->
         <div v-if="showEditForm" class="edit-form">
@@ -67,7 +64,7 @@
                 <label for="category">Categoría:</label>
                 <select v-model="selectedCategoryId" id="category" required>
                     <option v-for="category in categories" :key="category.id" :value="category.id">
-                        {{ category }}
+                        {{ category.name }}
                     </option>
                 </select>
 
@@ -135,15 +132,20 @@ export default {
 
         const editItem = (item) => {
             selectedItem.value = { ...item };
-            selectedCategoryId.value = item.category.id;
+            selectedCategoryId.value = item.category ? item.category.id : null;
             showEditForm.value = true;
         };
 
         const updateItem = async () => {
             try {
-                selectedItem.value.category.id = selectedCategoryId.value;
+                // Asignar la categoría seleccionada al selectedItem
+                selectedItem.value.category = {
+                    id: selectedCategoryId.value, // Solo asignamos el ID de la categoría
+                };
+
                 await axios.put(`/api/item/${selectedItem.value.id}`, selectedItem.value);
-                fetchItems();
+
+                fetchItems(); // Refresca la lista de items después de la actualización
                 showEditForm.value = false;
             } catch (error) {
                 console.error('Error updating item:', error);

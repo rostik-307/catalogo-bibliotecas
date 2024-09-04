@@ -2,6 +2,7 @@ package es.cic.curso.vuerest.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.cic.curso.vuerest.model.Item;
 import es.cic.curso.vuerest.service.ItemService;
+import main.java.es.cic.curso.vuerest.dto.ItemDTO;
 
 @RestController
 @RequestMapping("/api/item")
@@ -23,48 +25,48 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    // Obtener un ítem por su ID
     @GetMapping("/{id}")
-    public Item getItem(@PathVariable Long id) {
-        return itemService.findById(id).orElse(null);
+    public ItemDTO getItem(@PathVariable Long id) {
+        Optional<Item> itemOptional = itemService.findById(id);
+        if (itemOptional.isPresent()) {
+            Item item = itemOptional.get();
+            return new ItemDTO(item.getId(), item.getName(), item.getDetails(), item.getReleaseYear(),
+                    item.getCategory().getName());
+        }
+        return null; // Si no se encuentra el ítem
     }
 
+    // Obtener todos los ítems con el nombre de la categoría
     @GetMapping
-    public List<Item> getAllItems() {
-        return itemService.findAll();
+    public List<ItemDTO> getAllItems() {
+        List<Item> items = itemService.findAll();
+        return items.stream()
+                .map(item -> new ItemDTO(item.getId(), item.getName(), item.getDetails(), item.getReleaseYear(),
+                        item.getCategory().getName()))
+                .collect(Collectors.toList());
     }
 
+    // Crear un nuevo ítem
     @PostMapping
     public Item createItem(@RequestBody Item item) {
         return itemService.save(item);
     }
 
-    @PutMapping
-    public Item updateItem(@RequestBody Item itemDetails) {
-        Long id = itemDetails.getId();
+    // Eliminar un ítem por su ID
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable Long id) {
+        itemService.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Item updateItem(@PathVariable Long id, @RequestBody Item itemDetails) {
         return itemService.findById(id).map(item -> {
             item.setName(itemDetails.getName());
             item.setDetails(itemDetails.getDetails());
             item.setReleaseYear(itemDetails.getReleaseYear());
+            item.setCategory(itemDetails.getCategory());
             return itemService.save(item);
         }).orElse(null);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteitem(@PathVariable Long id) {
-        itemService.deleteById(id);
-    }
-
-    @PostMapping("/{id}/associate-category")
-    public Item associateCategory(@PathVariable Long id, @RequestBody Long categoryId) {
-        // Encontrar el ítem por su ID
-        Optional<Item> optionalItem = itemService.findById(id);
-
-        if (optionalItem.isPresent()) {
-            Item item = optionalItem.get();
-
-            return itemService.save(item);
-        } else {
-            return null;
-        }
     }
 }
