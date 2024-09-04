@@ -3,6 +3,8 @@ package es.cic.curso.vuerest.model;
 import jakarta.persistence.*;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Item {
 
@@ -16,7 +18,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private Category category;
 
     // Constructor predeterminado
@@ -31,7 +33,7 @@ public class Item {
     }
 
     // Constructor con parámetros
-    public Item(String name, String details, int releaseYear, Category category) {
+    public Item(String name, String details, int releaseYear, Category catedgory) {
         this.name = name;
         this.details = details;
         this.releaseYear = releaseYear;
