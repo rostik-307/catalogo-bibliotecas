@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-      <h1>Bienvenido al catálogo de Biblioteca</h1>
-      <img alt="Vue logo" class="logo" src="../assets/home.jpg" width="125" height="125" /> 
+      <img alt="logo" class="logo" src="@/assets/icon.png"/>
+      <h1>Bienvenido al catálogo de la Biblioteca Central de Cantabria</h1>
      
     </div>
 
