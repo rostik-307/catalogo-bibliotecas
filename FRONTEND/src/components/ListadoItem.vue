@@ -9,11 +9,13 @@
             placeholder="Introduzca Id"
         />
         <button @click="buscar">Buscar</button>
+        <button @click="resetear">Resetear</button>
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Nombre</th>
                     <th>Detalles</th>
                     <th>Año</th>
                     <th>Categoría</th>
@@ -23,14 +25,14 @@
             <tbody>
                 <tr v-for="item in filteredItems" :key="item.id">
                     <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
                     <td>{{ item.details }}</td>
-                    <td>{{ item.release_year }}</td>
+                    <td>{{ item.releaseYear }}</td>
                     <td>{{ item.category }}</td>
                     <td>
-                        <!-- Botones de acción para cada categoría -->
-                        <button @click="showDetails(item)">View Details</button>
-                        <button @click="editItem(item.id)">Edit</button>
-                        <button @click="deleteItem(item.id)">Delete</button>
+                        <button @click="showDetails(item)">Ver Detalles</button>
+                        <button @click="editItem(item)">Editar</button>
+                        <button @click="deleteItem(item.id)">Borrar</button>
                     </td>
                 </tr>
             </tbody>
@@ -42,10 +44,36 @@
                 <span class="close" @click="closeModal">&times;</span>
                 <h2>Item Details</h2>
                 <p><strong>ID:</strong> {{ selectedItem.id }}</p>
+                <p><strong>Nombre:</strong> {{ selectedItem.name }}</p>
                 <p><strong>Descripción:</strong> {{ selectedItem.details }}</p>
-                <p><strong>Año:</strong> {{ selectedItem.release_year }}</p>
+                <p><strong>Año:</strong> {{ selectedItem.releaseYear }}</p>
                 <p><strong>Categoría:</strong> {{ selectedItem.category }}</p>
             </div>
+        </div>
+
+        <!-- Formulario de edición -->
+        <div v-if="showEditForm" class="edit-form">
+            <h2>Editar Item</h2>
+            <form @submit.prevent="updateItem">
+                <label for="name">Nombre:</label>
+                <input type="text" v-model="selectedItem.name" id="name" required>
+
+                <label for="details">Detalles:</label>
+                <input type="text" v-model="selectedItem.details" id="details" required>
+
+                <label for="releaseYear">Año:</label>
+                <input type="number" v-model="selectedItem.releaseYear" id="releaseYear" required>
+
+                <label for="category">Categoría:</label>
+                <select v-model="selectedCategoryId" id="category" required>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                        {{ category }}
+                    </option>
+                </select>
+
+                <button type="submit">Guardar</button>
+                <button type="button" @click="cancelEdit">Cancelar</button>
+            </form>
         </div>
     </div>
 </template>
@@ -58,10 +86,13 @@ import { useRouter } from 'vue-router';
 export default {
     setup() {
         const items = ref([]);
+        const categories = ref([]);
         const searchId = ref('');
         const filteredItems = ref([]);
         const selectedItem = ref(null);
+        const selectedCategoryId = ref(null);
         const showModal = ref(false);
+        const showEditForm = ref(false);
         const router = useRouter();
 
         const fetchItems = async () => {
@@ -74,6 +105,15 @@ export default {
             }
         };
 
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('/api/category');
+                categories.value = response.data;
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
         const buscar = async () => {
             try {
                 const response = await axios.get(`/api/item/${searchId.value}`);
@@ -83,13 +123,31 @@ export default {
             }
         };
 
+        const resetear = () => {
+            filteredItems.value = items.value;
+            searchId.value = '';
+        };
+
         const showDetails = (item) => {
             selectedItem.value = item;
             showModal.value = true;
         };
 
-        const editItem = (id) => {
-            router.push(`/item/${id}/edit`);
+        const editItem = (item) => {
+            selectedItem.value = { ...item };
+            selectedCategoryId.value = item.category.id;
+            showEditForm.value = true;
+        };
+
+        const updateItem = async () => {
+            try {
+                selectedItem.value.category.id = selectedCategoryId.value;
+                await axios.put(`/api/item/${selectedItem.value.id}`, selectedItem.value);
+                fetchItems();
+                showEditForm.value = false;
+            } catch (error) {
+                console.error('Error updating item:', error);
+            }
         };
 
         const deleteItem = async (id) => {
@@ -105,19 +163,30 @@ export default {
             showModal.value = false;
         };
 
+        const cancelEdit = () => {
+            showEditForm.value = false;
+        };
+
         fetchItems();
+        fetchCategories();
 
         return {
             items,
+            categories,
             searchId,
             filteredItems,
             selectedItem,
+            selectedCategoryId,
             showModal,
+            showEditForm,
             buscar,
+            resetear,
             showDetails,
             editItem,
+            updateItem,
             deleteItem,
-            closeModal
+            closeModal,
+            cancelEdit
         };
     }
 };
@@ -159,5 +228,12 @@ export default {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.edit-form {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    margin-top: 20px;
 }
 </style>

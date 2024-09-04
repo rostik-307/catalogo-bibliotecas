@@ -24,9 +24,9 @@ public class ItemService {
     }
 
     public long crearItem(String name, String details, int releaseYear, Long categoryId) {
-        // You may need to adjust this part depending on how categories are handled
+
         Item item = new Item(name, details, releaseYear);
-        // Logic to associate category if needed
+
         itemRepository.save(item);
         return item.getId();
     }
