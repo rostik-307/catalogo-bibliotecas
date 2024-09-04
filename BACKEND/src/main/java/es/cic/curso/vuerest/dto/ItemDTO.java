@@ -52,22 +52,22 @@ public class ItemDTO {
         this.categoryId = categoryId;
     }
 
-    public String getCategory() {
+    public String getCategoryName() {
         return categoryName;
     }
 
-    public void setCategory(String categoryName) {
+    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-    
-    private ItemDTO convertirEntidadADTO(Item item) {
+
+    public static ItemDTO convertirEntidadADTO(Item item) {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setId(item.getId());
         itemDTO.setName(item.getName());
         itemDTO.setDetails(item.getDetails());
         itemDTO.setReleaseYear(item.getReleaseYear());
         itemDTO.setCategoryId(item.getCategory().getId());
-        itemDTO.setCategory(item.getCategory().getName());
+        itemDTO.setCategoryName(item.getCategory().getName());
         return itemDTO;
     }
 }

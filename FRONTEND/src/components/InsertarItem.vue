@@ -16,7 +16,7 @@
       <label for="categoriaId">Seleccione una Categoría:</label>
       <select id="categoriaId" v-model="nuevoItem.categoriaId">
         <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
-          {{ categoria.name }}
+          {{ categoria.id }} - {{ categoria.name }}
         </option>
       </select>
 
@@ -30,8 +30,7 @@
         <p>Nombre: {{ itemCreado.name }}</p>
         <p>Detalles: {{ itemCreado.details }}</p>
         <p>Año de lanzamiento: {{ itemCreado.releaseYear }}</p>
-        <p v-if="itemCreado.categoria">Categoría: {{ itemCreado.categoria?.name }}</p>
-
+        <p>Categoría: {{ itemCreado.categoryName }}</p>
       </div>
 
       <!-- Mostrar mensaje de éxito o error -->
@@ -70,8 +69,10 @@ const crearItem = async () => {
   }
 
   try {
-    console.log('Datos enviados al servidor:', nuevoItem.value);
-    const response = await axios.post('/api/item', nuevoItem.value);
+    // Serializar los datos antes de enviarlos
+    const datosSerializados = JSON.parse(JSON.stringify(nuevoItem.value));
+    console.log('Datos enviados al servidor:', datosSerializados);
+    const response = await axios.post('/api/item', datosSerializados);
 
     itemCreado.value = response.data;
     mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
