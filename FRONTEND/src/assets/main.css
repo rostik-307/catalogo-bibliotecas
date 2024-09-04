@@ -51,7 +51,7 @@ nav {
   background-color: var(--color-background-soft);
 }
 
-.modal-content,p{
+.modal-content p, .modal-content  input, .modal-content  h2{
   margin-top: 1em;
   display: block;
 }

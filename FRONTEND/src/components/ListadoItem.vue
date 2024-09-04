@@ -49,28 +49,30 @@
 
 
         <!-- Formulario de edición -->
-        <div v-if="showEditForm" class="edit-form">
-            <h2>Editar Item</h2>
-            <form @submit.prevent="updateItem">
-                <label for="name">Nombre:</label>
-                <input type="text" v-model="selectedItem.name" id="name" required>
-
-                <label for="details">Detalles:</label>
-                <input type="text" v-model="selectedItem.details" id="details" required>
-
-                <label for="releaseYear">Año:</label>
-                <input type="number" v-model="selectedItem.releaseYear" id="releaseYear" required>
-
-                <label for="category">Categoría:</label>
-                <select v-model="selectedCategoryId" id="category" required>
-                    <option v-for="category in categories" :key="category.id" :value="category.id">
-                        {{ category.name }}
-                    </option>
-                </select>
-
-                <button type="submit">Guardar</button>
-                <button type="button" @click="cancelEdit">Cancelar</button>
-            </form>
+        <div v-if="showEditForm" class="edit-form modal">
+            <div class="modal-content">
+                <h2>Editar Item</h2>
+                <form @submit.prevent="updateItem">
+                    <label for="name">Nombre:</label>
+                    <input type="text" v-model="selectedItem.name" id="name" required>
+    
+                    <label for="details">Detalles:</label>
+                    <input type="text" v-model="selectedItem.details" id="details" required>
+    
+                    <label for="releaseYear">Año:</label>
+                    <input type="number" v-model="selectedItem.releaseYear" id="releaseYear" required>
+    
+                    <label for="category">Categoría:</label>
+                    <select v-model="selectedCategoryId" id="category" required>
+                        <option v-for="category in categories" :key="category.id" :value="category.id">
+                            {{ category.name }}
+                        </option>
+                    </select>
+    
+                    <button type="submit">Guardar</button>
+                    <button type="button" @click="cancelEdit">Cancelar</button>
+                </form>
+            </div>
         </div>
     </div>
 </template>
@@ -224,10 +226,4 @@ export default {
     cursor: pointer;
 }
 
-.edit-form {
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
-    margin-top: 20px;
-}
 </style>
