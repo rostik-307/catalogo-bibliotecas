@@ -1,7 +1,7 @@
 package es.cic.curso.vuerest.controller;
 
-import main.java.es.cic.curso.vuerest.service.CategoryService;
-import main.java.es.cic.curso.vuerest.model.Category;
+import es.cic.curso.vuerest.service.CategoryService;
+import es.cic.curso.vuerest.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,14 @@
 package es.cic.curso.vuerest.dto;
 
 public class ItemDTO {
+
+    private Long id;
+    private String name;
+    private String details;
+    private Integer releaseYear;
+    private Long categoryId;
+    private String categoryName;
+
     private Long id;
     private String name;
     private String details;
@@ -55,5 +63,14 @@ public class ItemDTO {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    private ItemDTO convertirEntidadADTO(Item item) {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setId(item.getId());
+        itemDTO.setName(item.getName());
+        itemDTO.setDetails(item.getDetails());
+        itemDTO.setReleaseYear(item.getReleaseYear());
+        itemDTO.setCategoryId(item.getCategory().getId());
+        itemDTO.setCategory(item.getCategory().getName());
+        return itemDTO;
     }
 }

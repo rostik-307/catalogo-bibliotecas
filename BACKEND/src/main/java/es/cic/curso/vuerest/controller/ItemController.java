@@ -2,7 +2,6 @@ package es.cic.curso.vuerest.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import es.cic.curso.vuerest.dto.ItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.cic.curso.vuerest.model.Item;
 import es.cic.curso.vuerest.service.ItemService;
+import es.cic.curso.vuerest.service.CategoryService;
 
 @RestController
 @RequestMapping("/api/item")
@@ -77,4 +77,27 @@ public class ItemController {
             return null;
         }
     }
+
+    private ItemDTO convertToDTO(Item item) {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setId(item.getId());
+        itemDTO.setName(item.getName());
+        itemDTO.setDetails(item.getDetails());
+        itemDTO.setReleaseYear(item.getReleaseYear());
+        itemDTO.setCategory(item.getCategory().getName());
+        return itemDTO;
+    }
+
+    private Item convertToEntity(ItemDTO itemDTO) {
+        Item item = new Item();
+        item.setId(itemDTO.getId());
+        item.setName(itemDTO.getName());
+        item.setDetails(itemDTO.getDetails());
+        item.setReleaseYear(itemDTO.getReleaseYear());
+        item.setCategory(categoryService.findByName(itemDTO.getCategory()));
+        return item;
+    }
+
+    
+
 }

@@ -26,8 +26,7 @@ header{
 }
 
 .content{
-  margin-top: 100px;
-  display: flex;
+  display: block;
   justify-content: space-between;
   align-items: center;
   width: fit-content;
