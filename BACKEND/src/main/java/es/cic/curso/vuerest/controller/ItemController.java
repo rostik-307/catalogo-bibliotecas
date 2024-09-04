@@ -33,10 +33,25 @@ public class ItemController {
         return itemService.findAll();
     }
 
-    // Crear un nuevo ítem
     @PostMapping
     public ItemDTO createItem(@RequestBody ItemDTO itemDTO) {
-        return itemService.crearItem(itemDTO);
+        Item item = new Item();
+        item.setName(itemDTO.getName());
+        item.setDetails(itemDTO.getDetails());
+        item.setReleaseYear(itemDTO.getReleaseYear());
+
+        if (itemDTO.getCategoryId() != null) {
+            // Busca la categoría por ID
+            Category category = categoryService.findById(itemDTO.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            item.setCategory(category); // Asocia la categoría al ítem
+        }
+
+        // Guarda el ítem con la categoría asociada
+        Item savedItem = itemService.save(item);
+
+        // Convierte el ítem guardado a DTO para devolverlo
+        return ItemDTO.convertirEntidadADTO(savedItem);
     }
 
     @PutMapping
@@ -72,4 +87,20 @@ public class ItemController {
             return null;
         }
     }
+
+    private ItemDTO convertToDTO(Item item) {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setId(item.getId());
+        itemDTO.setName(item.getName());
+        itemDTO.setDetails(item.getDetails());
+        itemDTO.setReleaseYear(item.getReleaseYear());
+
+        // Si el ítem tiene una categoría asociada, agregamos el ID de la categoría
+        if (item.getCategory() != null) {
+            itemDTO.setCategoryId(item.getCategory().getId());
+        }
+
+        return itemDTO;
+    }
+
 }
