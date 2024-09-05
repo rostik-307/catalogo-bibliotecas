@@ -1,13 +1,13 @@
 <template>
     <div>
-        <h1>Lista Item</h1>
+        <h1><del>Listado</del> Catálogo de artículos</h1>
 
         <!-- Caja de búsqueda por ID -->
-        <input type="text" v-model="searchId" placeholder="Introduzca Id" />
+        <input type="text" v-model="searchId" placeholder="Busqueda por Id" />
         <button @click="buscar">Buscar</button>
-        <button @click="resetear">Resetear</button>
+        <button @click="resetear">Reiniciar</button>
 
-        <table>
+        <table class="details-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -26,7 +26,7 @@
                     <td>{{ item.releaseYear }}</td>
                     <td>{{ item.categoryName }}</td>
                     <td>
-                        <button @click="showDetails(item)">Ver Detalles</button>
+                        <button @click="showDetails(item)">Detalles</button>
                         <button @click="editItem(item)">Editar</button>
                         <button @click="deleteItem(item.id)">Borrar</button>
                     </td>
@@ -68,8 +68,9 @@
 
 
         <!-- Formulario de edición -->
-        <div v-if="showEditForm" class="edit-form modal">
+        <div v-if="showEditForm" class="edit-form modal" @click.self="closeEditForm">
             <div class="modal-content">
+                <span class="close" @click="closeEditForm">&times;</span>
                 <span>
                     <h2>Editar Item</h2>
                 </span>
@@ -175,6 +176,10 @@ export default {
             }
         };
 
+        const closeEditForm = () => {
+            showEditForm.value = false;
+        };
+
         const deleteItem = async (id) => {
             try {
                 await axios.delete(`/api/item/${id}`);
@@ -202,6 +207,7 @@ export default {
             filteredItems,
             selectedItem,
             selectedCategoryId,
+            closeEditForm,
             showModal,
             showEditForm,
             buscar,
