@@ -11,7 +11,8 @@
       <input id="itemDetails" v-model="nuevoItem.details" :disabled="itemCreado !== null" />
 
       <label for="releaseYear">Año de lanzamiento:</label>
-      <input id="releaseYear" v-model="nuevoItem.releaseYear" type="number" placeholder="Ingrese el año de lanzamiento" />
+      <input id="releaseYear" v-model="nuevoItem.releaseYear" type="number"
+        placeholder="Ingrese el año de lanzamiento" />
 
       <label for="categoriaId">Seleccione una Categoría:</label>
       <select id="categoriaId" v-model="nuevoItem.categoriaId">
@@ -60,7 +61,6 @@ const cargarCategorias = async () => {
     console.error('Error al cargar las categorías:', error);
   }
 };
-
 // Función para crear el ítem y asociar la categoría seleccionada
 const crearItem = async () => {
   if (!nuevoItem.value.categoriaId) {
@@ -69,6 +69,11 @@ const crearItem = async () => {
   }
 
   try {
+    // Verificar que categoriaId no sea null o undefined
+    if (!nuevoItem.value.categoriaId) {
+      throw new Error('El ID de la categoría no es válido.');
+    }
+
     // Serializar los datos antes de enviarlos
     const datosSerializados = JSON.parse(JSON.stringify(nuevoItem.value));
     console.log('Datos enviados al servidor:', datosSerializados);
@@ -82,7 +87,6 @@ const crearItem = async () => {
     console.error('Error al crear el ítem:', error);
   }
 };
-
 // Cargar las categorías cuando el componente se monta
 onMounted(cargarCategorias);
 </script>
@@ -100,7 +104,8 @@ label {
   display: block;
 }
 
-input, select {
+input,
+select {
   display: block;
   margin-top: 5px;
 }
