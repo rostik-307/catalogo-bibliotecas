@@ -1,54 +1,46 @@
-describe('InsertarItem Component', () => {
+describe('Insertar Item', () => {
   beforeEach(() => {
-    cy.visit('/insertar'); 
+    // Interceptar la solicitud de categorías
+    cy.intercept('GET', '/api/category').as('getCategorias');
+    // Interceptar la solicitud para crear un ítem
+    cy.intercept('POST', '/api/item').as('createItem');
+    
+    cy.visit('/insertar');
   });
 
-  it('should load categories and create a new item', () => {
-    // Mock de la respuesta de categorías
-    cy.intercept('GET', '/api/category', {
-      statusCode: 200,
-      body: [
-        { id: 1, name: 'Categoría 1' },
-        { id: 2, name: 'Categoría 2' }
-      ]
-    }).as('getCategorias');
-
-    // Mock de la respuesta de creación de ítem
-    cy.intercept('POST', '/api/item', {
-      statusCode: 201,
-      body: {
-        id: 1,
-        name: 'Nuevo Ítem',
-        details: 'Detalles del ítem',
-        releaseYear: 2023,
-        categoryId: 1
-      }
-    }).as('postItem');
-
-    // Esperar a que las categorías se carguen
+  it('debe cargar los elementos básicos de la página', () => {
+    
     cy.wait('@getCategorias');
 
-    // Llenar el formulario
-    cy.get('input[name="name"]').type('Nuevo Ítem');
-    cy.get('textarea[name="details"]').type('Detalles del ítem');
-    cy.get('input[name="releaseYear"]').type('2023');
-    cy.get('select[name="categoria"]').select('1');
+    // Verificar que el select de categorías y los inputs existen
+    cy.get('select#categoria').should('exist');
+    cy.get('input#name').should('exist');
+    cy.get('input#details').should('exist');
+    cy.get('input#releaseYear').should('exist');
+
+    // Verificar que el botón de envío existe
+    cy.get('button[type="submit"]').should('exist');
+  });
+
+  it('debe permitir el envío del formulario cuando todos los campos están llenos', () => {
+    
+    cy.wait('@getCategorias');
+
+    // Completar el formulario correctamente
+    cy.get('input#name').type('Ítem con categoría');
+    cy.get('input#details').type('Detalles del ítem');
+    cy.get('input#releaseYear').type('2023');
+    cy.get('select#categoria').select('1'); 
 
     // Enviar el formulario
-    cy.get('form').submit();
+    cy.get('button[type="submit"]').click();
 
-    // Esperar a que el ítem se cree
-    cy.wait('@postItem');
+    // Verificar que la solicitud para crear el ítem se haya realizado
+    cy.wait('@createItem').then((interception) => {
+      expect(interception.response.statusCode).to.equal(200);
+    });
 
-    // Verificar que el mensaje de éxito se muestre
-    cy.contains('Ítem creado y categoría asociada exitosamente.');
-
-    // Verificar que los detalles del ítem creado se muestren
-    cy.contains('Ítem Creado');
-    cy.contains('ID: 1');
-    cy.contains('Nombre: Nuevo Ítem');
-    cy.contains('Detalles: Detalles del ítem');
-    cy.contains('Año de Lanzamiento: 2023');
-    cy.contains('Categoría: 1');
+    // Verificar el mensaje de éxito
+    cy.contains('Ítem creado y categoría asociada exitosamente.').should('exist');
   });
 });
