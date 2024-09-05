@@ -38,11 +38,12 @@
         <!-- Modal para mostrar detalles del item -->
         <div v-if="showModal" class="modal" @click.self="closeModal">
             <div class="modal-content">
+                
                 <span class="close" @click="closeModal">&times;</span>
                 <div>
                     <h2>Detalles de artículo</h2>
                 </div>
-                <table>
+                <table class="details-table">
                     <tr>
                         <td>ID:</td>
                         <td>{{ selectedItem.id }}</td>

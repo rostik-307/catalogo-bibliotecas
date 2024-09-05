@@ -1,5 +1,7 @@
 @import './base.css';
 
+
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -19,8 +21,11 @@ header{
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background-color: var(--color-background-soft);
+  overflow: hidden;  
+  background: color-mix(in srgb, 
+  var(--color-background) calc(100% - var(--toggle, 0) * 1%),
+  var(--color-background-soft) calc(var(--toggle, 1) * 100%) 
+  );
   position: fixed;
   top: 0;
   width: 100%;
