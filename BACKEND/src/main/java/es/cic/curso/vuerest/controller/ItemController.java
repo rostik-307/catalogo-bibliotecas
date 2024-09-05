@@ -25,14 +25,21 @@ public class ItemController {
 
     // Obtener un ítem por su ID
     @GetMapping("/{id}")
-    public Item getItem(@PathVariable Long id) {
-        return itemService.findById(id).orElse(null);
+    public ResponseEntity<ItemDTO> getItem(@PathVariable Long id) {
+        Optional<Item> itemOptional = itemService.findById(id);
+        if (itemOptional.isPresent()) {
+            return ResponseEntity.ok(itemOptional.get().toDTO());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // Obtener todos los ítems con el nombre de la categoría
     @GetMapping
-    public List<Item> getAllItems() {
-        return itemService.findAll();
+    public ResponseEntity<List<ItemDTO>> getAllItems() {
+        List<Item> items = itemService.findAll();
+        List<ItemDTO> itemDTOs = items.stream().map(Item::toDTO).toList();
+        return ResponseEntity.ok(itemDTOs);
     }
 
     @PostMapping
@@ -54,7 +61,7 @@ public class ItemController {
             Item savedItem = itemService.save(item);
 
             // Convierte el ítem guardado a DTO para devolverlo
-            return ResponseEntity.ok(ItemDTO.convertirEntidadADTO(savedItem));
+            return ResponseEntity.ok(savedItem.toDTO());
         } catch (Exception e) {
             // Aquí puedes capturar y manejar la excepción
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -62,53 +69,52 @@ public class ItemController {
         }
     }
 
-    @PutMapping
-    public Item updateItem(@RequestBody Item itemDetails) {
-        Long id = itemDetails.getId();
-        return itemService.findById(id).map(item -> {
-            item.setName(itemDetails.getName());
-            item.setDetails(itemDetails.getDetails());
-            item.setReleaseYear(itemDetails.getReleaseYear());
-            return itemService.save(item);
-        }).orElse(null);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
+        Optional<Item> itemOptional = itemService.findById(id);
+        if (itemOptional.isPresent()) {
+            Item item = itemOptional.get();
+            item.setName(itemDTO.getName());
+            item.setDetails(itemDTO.getDetails());
+            item.setReleaseYear(itemDTO.getReleaseYear());
+
+            if (itemDTO.getCategoryId() != null) {
+                Category category = categoryService.findById(itemDTO.getCategoryId())
+                        .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+                item.setCategory(category);
+            }
+
+            Item updatedItem = itemService.save(item);
+            return ResponseEntity.ok(updatedItem.toDTO());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ítem no encontrado");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable Long id) {
-        itemService.deleteById(id);
+    public ResponseEntity<?> deleteItem(@PathVariable Long id) {
+        try {
+            itemService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar el ítem: " + e.getMessage());
+        }
     }
 
     @PostMapping("/{id}/associate-category")
-    public Item associateCategory(@PathVariable Long id, @RequestBody Long categoryId) {
-        // Encontrar el ítem por su ID
+    public ResponseEntity<?> associateCategory(@PathVariable Long id, @RequestBody Long categoryId) {
         Optional<Item> optionalItem = itemService.findById(id);
 
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-            // Encontrar la categoría por su ID
             Category category = categoryService.findById(categoryId)
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-            // Asociar la categoría al ítem
             item.setCategory(category);
-            return itemService.save(item);
+            Item updatedItem = itemService.save(item);
+            return ResponseEntity.ok(updatedItem.toDTO());
         } else {
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ítem no encontrado");
         }
     }
-
-    private ItemDTO convertToDTO(Item item) {
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setId(item.getId());
-        itemDTO.setName(item.getName());
-        itemDTO.setDetails(item.getDetails());
-        itemDTO.setReleaseYear(item.getReleaseYear());
-
-        // Si el ítem tiene una categoría asociada, agregamos el ID de la categoría
-        if (item.getCategory() != null) {
-            itemDTO.setCategoryId(item.getCategory().getId());
-        }
-
-        return itemDTO;
-    }
-
 }

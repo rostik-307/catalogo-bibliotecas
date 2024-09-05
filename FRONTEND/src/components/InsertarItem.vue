@@ -1,3 +1,42 @@
+<template>
+  <div>
+    <h1>Insertar Nuevo Ítem</h1>
+    <form @submit.prevent="crearItem">
+      <div>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" v-model="nuevoItem.name" required />
+      </div>
+      <div>
+        <label for="details">Detalles:</label>
+        <input type="text" id="details" v-model="nuevoItem.details" required />
+      </div>
+      <div>
+        <label for="releaseYear">Año de Lanzamiento:</label>
+        <input type="number" id="releaseYear" v-model="nuevoItem.releaseYear" required />
+      </div>
+      <div>
+        <label for="categoriaId">Categoría:</label>
+        <select id="categoriaId" v-model="nuevoItem.categoriaId" required>
+          <option value="" disabled>Seleccione una categoría</option>
+          <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
+            {{ categoria.name }}
+          </option>
+        </select>
+      </div>
+      <button type="submit">Crear Ítem</button>
+    </form>
+    <p v-if="mensaje">{{ mensaje }}</p>
+    <div v-if="itemCreado">
+      <h2>Ítem Creado</h2>
+      <p><strong>ID:</strong> {{ itemCreado.id }}</p>
+      <p><strong>Nombre:</strong> {{ itemCreado.name }}</p>
+      <p><strong>Detalles:</strong> {{ itemCreado.details }}</p>
+      <p><strong>Año de Lanzamiento:</strong> {{ itemCreado.releaseYear }}</p>
+      <p><strong>Categoría:</strong> {{ itemCreado.category ? itemCreado.category.name : 'Sin categoría' }}</p>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
