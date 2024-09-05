@@ -16,9 +16,9 @@
       </div>
       <div>
         <label for="categoria">Categoría:</label>
-        <select id="categoria" v-model="nuevoItem.categoria" required>
+        <select id="categoria" v-model="nuevoItem.categoriaId" required>
           <option value="" disabled>Seleccione una categoría</option>
-          <option v-for="categoria in categorias" :key="categoria.id" :value="categoria">
+          <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
             {{ categoria.name }}
           </option>
         </select>
@@ -26,6 +26,8 @@
       <button type="submit">Crear Ítem</button>
     </form>
     <p v-if="mensaje">{{ mensaje }}</p>
+    
+    <!-- Mostrar detalles del ítem creado -->
     <div v-if="itemCreado">
       <h2>Ítem Creado</h2>
       <p><strong>ID:</strong> {{ itemCreado.id }}</p>
@@ -42,7 +44,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 // Variables reactivas
-const nuevoItem = ref({ name: '', details: '', releaseYear: '', categoria: null });
+const nuevoItem = ref({ name: '', details: '', releaseYear: '', categoriaId: null }); // 'categoriaId' ahora es solo el ID
 const itemCreado = ref(null); // Almacena los datos del ítem creado
 const categorias = ref([]); // Almacena las categorías disponibles
 const mensaje = ref(''); // Almacena mensajes de éxito o error
@@ -51,7 +53,7 @@ const mensaje = ref(''); // Almacena mensajes de éxito o error
 const cargarCategorias = async () => {
   try {
     const response = await axios.get('/api/category');
-    categorias.value = response.data;
+    categorias.value = response.data; // Cargar las categorías desde el backend
   } catch (error) {
     console.error('Error al cargar las categorías:', error);
   }
@@ -59,28 +61,25 @@ const cargarCategorias = async () => {
 
 // Función para crear el ítem y asociar la categoría seleccionada
 const crearItem = async () => {
-  if (!nuevoItem.value.categoria) {
+  if (!nuevoItem.value.categoriaId) {
     alert('Por favor, seleccione una categoría.');
     return;
   }
 
   try {
-    // Verificar que categoria no sea null o undefined
-    if (!nuevoItem.value.categoria) {
-      throw new Error('El ID de la categoría no es válido.');
-    }
-
     // Crear un objeto con los datos a enviar, incluyendo solo el ID de la categoría
     const datosSerializados = {
       ...nuevoItem.value,
-      categoriaId: nuevoItem.value.categoria.id
+      categoriaId: nuevoItem.value.categoriaId // Solo enviar el ID de la categoría
     };
     console.log('Datos enviados al servidor:', datosSerializados);
-    const response = await axios.post('/api/item', datosSerializados);
+    const response = await axios.post('/api/item', datosSerializados); // Realizar la solicitud POST
 
-    itemCreado.value = response.data;
+    itemCreado.value = response.data; // Guardar el ítem creado
     mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
-    nuevoItem.value = { name: '', details: '', releaseYear: '', categoria: null }; // Limpia el formulario de ítem
+    
+    // Resetear el formulario
+    nuevoItem.value = { name: '', details: '', releaseYear: '', categoriaId: null };
   } catch (error) {
     mensaje.value = 'Error al crear el ítem o asociar la categoría.';
     console.error('Error al crear el ítem:', error);
@@ -90,3 +89,7 @@ const crearItem = async () => {
 // Cargar las categorías cuando el componente se monta
 onMounted(cargarCategorias);
 </script>
+
+<style scoped>
+/* Aquí puedes agregar tus estilos CSS si es necesario */
+</style>

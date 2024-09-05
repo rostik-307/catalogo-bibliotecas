@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -18,6 +19,7 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JsonManagedReference
+    @JsonIgnore
     private List<Item> items;
 
     // Constructor sin parámetros
