@@ -10,40 +10,84 @@
     <button @click="buscar">Buscar</button>
     <button @click="resetear">Reiniciar</button>
 
-        <table class="details-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Detalles</th>
-                    <th>Año</th>
-                    <th>Categoría</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in filteredItems" :key="item.id">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.details }}</td>
-                    <td>{{ item.releaseYear }}</td>
-                    <td>{{ item.categoryName }}</td>
-                    <td>
-                        <button @click="showDetails(item)">Detalles</button>
-                        <button @click="editItem(item)">Editar</button>
-                        <button @click="deleteItem(item.id)">Borrar</button>
-                    </td>
-                </tr>
-            </tbody>
+    <table class="details-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Detalles</th>
+          <th>Año</th>
+          <th>Categoría</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in filteredItems" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.details }}</td>
+          <td>{{ item.releaseYear }}</td>
+          <td>{{ item.categoryName }}</td>
+          <td>
+            <!-- Tooltips en botones -->
+            <button @click="showDetails(item)" title="Ver detalles">
+              Detalles
+            </button>
+            <button @click="editItem(item)" title="Editar artículo">
+              Editar
+            </button>
+            <button @click="openDeleteModal(item.id)" title="Eliminar artículo">
+              Borrar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Toast notification para mostrar mensajes -->
+    <ToastificationPlugin />
+
+    <!-- Modal para mostrar detalles del item -->
+    <div v-if="showModal" class="modal" @click.self="closeModal">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <div>
+          <h2>Detalles de artículo</h2>
+        </div>
+        <table>
+          <tr>
+            <td>ID:</td>
+            <td>{{ selectedItem.id }}</td>
+          </tr>
+          <tr>
+            <td>Nombre:</td>
+            <td>{{ selectedItem.name }}</td>
+          </tr>
+          <tr>
+            <td>Detalles:</td>
+            <td>{{ selectedItem.details }}</td>
+          </tr>
+          <tr>
+            <td>Año:</td>
+            <td>{{ selectedItem.releaseYear }}</td>
+          </tr>
+          <tr>
+            <td>Categoría:</td>
+            <td>{{ selectedItem.categoryName }}</td>
+          </tr>
         </table>
+<<<<<<< HEAD
+      </div>
+=======
         <!-- Modal para mostrar detalles del item -->
         <div v-if="showModal" class="modal" @click.self="closeModal">
             <div class="modal-content">
+                
                 <span class="close" @click="closeModal">&times;</span>
                 <div>
                     <h2>Detalles de artículo</h2>
                 </div>
-                <table>
+                <table class="details-table">
                     <tr>
                         <td>ID:</td>
                         <td>{{ selectedItem.id }}</td>
@@ -67,6 +111,37 @@
                 </table>
             </div>
         </div>
+
+
+        <!-- Formulario de edición -->
+        <div v-if="showEditForm" class="edit-form modal" @click.self="closeEditForm">
+            <div class="modal-content">
+                <span class="close" @click="closeEditForm">&times;</span>
+                <span>
+                    <h2>Editar Artículo</h2>
+                </span>
+                <form @submit.prevent="updateItem">
+                    <label for="name">Nombre:</label>   
+                    <input type="text" v-model="selectedItem.name" id="name" required>
+
+                    <label for="details">Detalles:</label>
+                    <input type="text" v-model="selectedItem.details" id="details" required>
+
+                    <label for="releaseYear">Año:</label>
+                    <input type="number" v-model="selectedItem.releaseYear" id="releaseYear" required>
+
+                    <label for="category">Categoría:</label>
+                    <select v-model="selectedItem.categoryId" id="category" required>
+                        <option v-for="category in categories" :key="category.id" :value="category.id">
+                            {{ category.name }}
+                        </option>
+                    </select>
+                    <button type="submit">Actualizar artículo</button>
+                </form>
+            </div>
+        </div>
+>>>>>>> 52588d30b703633e6e0df094c9270719e68a3256
+    </div>
 
     <!-- Modal de confirmación para eliminar -->
     <div v-if="showDeleteModal" class="modal" @click.self="closeDeleteModal">
