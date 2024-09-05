@@ -41,33 +41,38 @@ public class ItemController {
         List<ItemDTO> itemDTOs = items.stream().map(Item::toDTO).toList();
         return ResponseEntity.ok(itemDTOs);
     }
-
     @PostMapping
     public ResponseEntity<?> createItem(@RequestBody ItemDTO itemDTO) {
         try {
+            System.out.println("Recibiendo ItemDTO con categoryId: " + itemDTO.getCategoryId());
+            
             Item item = new Item();
             item.setName(itemDTO.getName());
             item.setDetails(itemDTO.getDetails());
             item.setReleaseYear(itemDTO.getReleaseYear());
-
+    
             if (itemDTO.getCategoryId() != null) {
-                // Busca la categoría por ID
+                // Verificar si el categoryId es correcto
+                System.out.println("Buscando categoría con ID: " + itemDTO.getCategoryId());
                 Category category = categoryService.findById(itemDTO.getCategoryId())
                         .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-                item.setCategory(category); // Asocia la categoría al ítem
+                item.setCategory(category);
+                System.out.println("Categoría encontrada y asociada: " + category.getName());
+            } else {
+                throw new RuntimeException("El ID de la categoría es nulo");
             }
-
-            // Guarda el ítem con la categoría asociada
+    
+            // Guardar el ítem
             Item savedItem = itemService.save(item);
-
-            // Convierte el ítem guardado a DTO para devolverlo
+    
             return ResponseEntity.ok(savedItem.toDTO());
         } catch (Exception e) {
-            // Aquí puedes capturar y manejar la excepción
+            System.out.println("Error al crear el ítem: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear el ítem: " + e.getMessage());
         }
     }
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {

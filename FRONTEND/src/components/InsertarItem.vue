@@ -17,11 +17,12 @@
       <div>
         <label for="categoria">Categoría:</label>
         <select id="categoria" v-model="nuevoItem.categoriaId" required>
-          <option value="" disabled>Seleccione una categoría</option>
-          <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
-            {{ categoria.name }}
-          </option>
-        </select>
+       <option value="" disabled>Seleccione una categoría</option>
+        <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
+    {{ categoria.id }} - {{ categoria.name }}
+      </option>
+</select>
+
       </div>
       <button type="submit">Crear Ítem</button>
     </form>
@@ -34,7 +35,7 @@
       <p><strong>Nombre:</strong> {{ itemCreado.name }}</p>
       <p><strong>Detalles:</strong> {{ itemCreado.details }}</p>
       <p><strong>Año de Lanzamiento:</strong> {{ itemCreado.releaseYear }}</p>
-      <p><strong>Categoría:</strong> {{ itemCreado.category ? itemCreado.category.name : 'Sin categoría' }}</p>
+      <p><strong>Categoría:</strong> {{ itemCreado.categoryId }}</p>
     </div>
   </div>
 </template>
@@ -44,7 +45,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 // Variables reactivas
-const nuevoItem = ref({ name: '', details: '', releaseYear: '', categoriaId: null }); // 'categoriaId' ahora es solo el ID
+const nuevoItem = ref({ name: '', details: '', releaseYear: '', categoriaId: null });
 const itemCreado = ref(null); // Almacena los datos del ítem creado
 const categorias = ref([]); // Almacena las categorías disponibles
 const mensaje = ref(''); // Almacena mensajes de éxito o error
@@ -61,24 +62,27 @@ const cargarCategorias = async () => {
 
 // Función para crear el ítem y asociar la categoría seleccionada
 const crearItem = async () => {
+  console.log("ID de la categoría seleccionada:", nuevoItem.value.categoriaId);
+
   if (!nuevoItem.value.categoriaId) {
     alert('Por favor, seleccione una categoría.');
     return;
   }
 
   try {
-    // Crear un objeto con los datos a enviar, incluyendo solo el ID de la categoría
     const datosSerializados = {
-      ...nuevoItem.value,
-      categoriaId: nuevoItem.value.categoriaId // Solo enviar el ID de la categoría
+      name: nuevoItem.value.name,
+      details: nuevoItem.value.details,
+      releaseYear: nuevoItem.value.releaseYear,
+      categoryId: nuevoItem.value.categoriaId // Enviamos solo el ID de la categoría
     };
-    console.log('Datos enviados al servidor:', datosSerializados);
-    const response = await axios.post('/api/item', datosSerializados); // Realizar la solicitud POST
 
-    itemCreado.value = response.data; // Guardar el ítem creado
-    mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
+    console.log('Datos enviados al servidor:', datosSerializados);
+
+    const response = await axios.post('/api/item', datosSerializados);
     
-    // Resetear el formulario
+    itemCreado.value = response.data;
+    mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
     nuevoItem.value = { name: '', details: '', releaseYear: '', categoriaId: null };
   } catch (error) {
     mensaje.value = 'Error al crear el ítem o asociar la categoría.';
@@ -86,10 +90,11 @@ const crearItem = async () => {
   }
 };
 
+
 // Cargar las categorías cuando el componente se monta
 onMounted(cargarCategorias);
 </script>
 
 <style scoped>
-/* Aquí puedes agregar tus estilos CSS si es necesario */
+
 </style>
