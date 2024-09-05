@@ -60,14 +60,4 @@ public class ItemDTO {
         this.categoryName = categoryName;
     }
 
-    public static ItemDTO convertirEntidadADTO(Item item) {
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setId(item.getId());
-        itemDTO.setName(item.getName());
-        itemDTO.setDetails(item.getDetails());
-        itemDTO.setReleaseYear(item.getReleaseYear());
-        itemDTO.setCategoryId(item.getCategory().getId());
-        itemDTO.setCategoryName(item.getCategory().getName());
-        return itemDTO;
-    }
 }

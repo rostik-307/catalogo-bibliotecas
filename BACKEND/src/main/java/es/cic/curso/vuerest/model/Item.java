@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import es.cic.curso.vuerest.dto.ItemDTO;
+
 @Entity
 public class Item {
 
@@ -18,7 +20,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore
+    // @JsonIgnore
     private Category category;
 
     // Constructor predeterminado
@@ -81,21 +83,25 @@ public class Item {
         this.category = category;
     }
 
-    // equals y hashCode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Item item = (Item) o;
-        return releaseYear == item.releaseYear && Objects.equals(id, item.id) && Objects.equals(name, item.name)
-                && Objects.equals(details, item.details) && Objects.equals(category, item.category);
+    public ItemDTO toDTO() {
+        ItemDTO dto = new ItemDTO();
+        dto.setId(this.id);
+        dto.setName(this.name);
+        dto.setDetails(this.details);
+        dto.setReleaseYear(this.releaseYear);
+        dto.setCategoryId(this.category.getId());
+        dto.setCategoryName(this.category.getName());
+        return dto;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, details, releaseYear, category);
+    public static Item fromDTO(ItemDTO dto, Category category) {
+        Item item = new Item();
+        item.setId(dto.getId());
+        item.setName(dto.getName());
+        item.setDetails(dto.getDetails());
+        item.setReleaseYear(dto.getReleaseYear());
+        item.setCategory(category);
+        return item;
     }
 
     // toString
@@ -109,4 +115,5 @@ public class Item {
                 ", category=" + category.getName() +
                 '}';
     }
+
 }
