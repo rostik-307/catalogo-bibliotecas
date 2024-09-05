@@ -40,6 +40,12 @@ nav {
   background-color: var(--color-background-soft);
 }
 
+@media (max-width: 1024px) {
+  #app {
+    margin-top: 12em !important;
+  }
+}
+
 .modal-content{
   margin-top: 100px;
   display: flex;
@@ -79,7 +85,6 @@ select{
   font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-  /* transition: 0.3s; */
   border-color: var(--color-background-soft);
   border-width: 0.4em;
   width: 100%; 
@@ -151,12 +156,5 @@ a,
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
   }
 }
