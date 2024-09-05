@@ -1,32 +1,24 @@
 <template>
-  <div>
+  <div class="table-insert">
     <h1>Insertar Nuevo Ítem</h1>
     <form @submit.prevent="crearItem">
-      <div>
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" v-model="nuevoItem.name" required />
-      </div>
-      <div>
-        <label for="details">Detalles:</label>
-        <input type="text" id="details" v-model="nuevoItem.details" required />
-      </div>
-      <div>
-        <label for="releaseYear">Año de Lanzamiento:</label>
-        <input type="number" id="releaseYear" v-model="nuevoItem.releaseYear" required />
-      </div>
-      <div>
-        <label for="categoria">Categoría:</label>
-        <select id="categoria" v-model="nuevoItem.categoriaId" required>
-          <option value="" disabled>Seleccione una categoría</option>
-          <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
-            {{ categoria.name }}
-          </option>
-        </select>
-      </div>
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" v-model="nuevoItem.name" required />
+      <label for="details">Detalles:</label>
+      <input type="text" id="details" v-model="nuevoItem.details" required />
+      <label for="releaseYear">Año de Lanzamiento:</label>
+      <input type="number" id="releaseYear" v-model="nuevoItem.releaseYear" required />
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" v-model="nuevoItem.categoriaId" required>
+        <option value="" disabled>Seleccione una categoría</option>
+        <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
+          {{ categoria.name }}
+        </option>
+      </select>
       <button type="submit">Crear Ítem</button>
     </form>
     <p v-if="mensaje">{{ mensaje }}</p>
-    
+
     <!-- Mostrar detalles del ítem creado -->
     <div v-if="itemCreado">
       <h2>Ítem Creado</h2>
@@ -77,7 +69,7 @@ const crearItem = async () => {
 
     itemCreado.value = response.data; // Guardar el ítem creado
     mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
-    
+
     // Resetear el formulario
     nuevoItem.value = { name: '', details: '', releaseYear: '', categoriaId: null };
   } catch (error) {

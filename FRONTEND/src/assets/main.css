@@ -71,6 +71,11 @@ nav {
   text-align: left;
 }
 
+.table-insert label, .table-insert input{
+  display: block;
+  padding: 1em;
+  width: 100%;
+}
 
 .details-table tr{
   border-bottom: #333 0.2em solid;
