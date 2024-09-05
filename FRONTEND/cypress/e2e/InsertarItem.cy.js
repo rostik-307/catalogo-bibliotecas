@@ -1,7 +1,6 @@
 describe('InsertarItem Component', () => {
   beforeEach(() => {
-    // Visita la página donde se encuentra el componente InsertarItem
-    cy.visit('/ruta-a-tu-componente'); // Cambia esta ruta a la ruta correcta de tu aplicación
+    cy.visit('/insertar'); 
   });
 
   it('should load categories and create a new item', () => {
