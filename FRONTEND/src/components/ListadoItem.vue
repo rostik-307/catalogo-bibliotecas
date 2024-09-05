@@ -1,13 +1,13 @@
 <template>
     <div>
-        <h1>Lista Item</h1>
+        <h1><del>Listado</del> Catálogo de artículos</h1>
 
         <!-- Caja de búsqueda por ID -->
-        <input type="text" v-model="searchId" placeholder="Introduzca Id" />
+        <input type="text" v-model="searchId" placeholder="Busqueda por Id" />
         <button @click="buscar">Buscar</button>
-        <button @click="resetear">Resetear</button>
+        <button @click="resetear">Reiniciar</button>
 
-        <table>
+        <table class="details-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -26,7 +26,7 @@
                     <td>{{ item.releaseYear }}</td>
                     <td>{{ item.categoryName }}</td>
                     <td>
-                        <button @click="showDetails(item)">Ver Detalles</button>
+                        <button @click="showDetails(item)">Detalles</button>
                         <button @click="editItem(item)">Editar</button>
                         <button @click="deleteItem(item.id)">Borrar</button>
                     </td>
@@ -38,20 +38,42 @@
         <div v-if="showModal" class="modal" @click.self="closeModal">
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
-                <h2>Item Details</h2>
-                <p><strong>ID:</strong> {{ selectedItem.id }}</p>
-                <p><strong>Nombre:</strong> {{ selectedItem.name }}</p>
-                <p><strong>Descripción:</strong> {{ selectedItem.details }}</p>
-                <p><strong>Año:</strong> {{ selectedItem.releaseYear }}</p>
-                <p><strong>Categoría:</strong> {{ selectedItem.category }}</p>
+                <div>
+                    <h2>Item Details</h2>
+                </div>
+                <table class="details-table">
+                    <tr>
+                        <td>ID:</td>
+                        <td>{{ selectedItem.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre:</td>
+                        <td>{{ selectedItem.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Detalles:</td>
+                        <td>{{ selectedItem.details }}</td>
+                    </tr>
+                    <tr>
+                        <td>Año:</td>
+                        <td>{{ selectedItem.releaseYear }}</td>
+                    </tr>
+                    <tr>
+                        <td>Categoría:</td>
+                        <td>{{ selectedItem.category }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
 
 
         <!-- Formulario de edición -->
-        <div v-if="showEditForm" class="edit-form modal">
+        <div v-if="showEditForm" class="edit-form modal" @click.self="closeEditForm">
             <div class="modal-content">
-                <h2>Editar Item</h2>
+                <span class="close" @click="closeEditForm">&times;</span>
+                <span>
+                    <h2>Editar Item</h2>
+                </span>
                 <form @submit.prevent="updateItem">
                     <label for="name">Nombre:</label>
                     <input type="text" v-model="selectedItem.name" id="name" required>
@@ -154,6 +176,10 @@ export default {
             }
         };
 
+        const closeEditForm = () => {
+            showEditForm.value = false;
+        };
+
         const deleteItem = async (id) => {
             try {
                 await axios.delete(`/api/item/${id}`);
@@ -181,6 +207,7 @@ export default {
             filteredItems,
             selectedItem,
             selectedCategoryId,
+            closeEditForm,
             showModal,
             showEditForm,
             buscar,

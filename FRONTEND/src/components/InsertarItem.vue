@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="table-insert">
     <h1>Insertar Nuevo Ítem</h1>
     <form @submit.prevent="crearItem">
+
       <div>
         <label for="name">Nombre:</label>
         <input type="text" id="name" v-model="nuevoItem.name" required />
@@ -24,10 +25,11 @@
 </select>
 
       </div>
+
       <button type="submit">Crear Ítem</button>
     </form>
     <p v-if="mensaje">{{ mensaje }}</p>
-    
+
     <!-- Mostrar detalles del ítem creado -->
     <div v-if="itemCreado">
       <h2>Ítem Creado</h2>
@@ -77,12 +79,14 @@ const crearItem = async () => {
       categoryId: nuevoItem.value.categoriaId // Enviamos solo el ID de la categoría
     };
 
+
     console.log('Datos enviados al servidor:', datosSerializados);
 
     const response = await axios.post('/api/item', datosSerializados);
     
     itemCreado.value = response.data;
     mensaje.value = 'Ítem creado y categoría asociada exitosamente.';
+
     nuevoItem.value = { name: '', details: '', releaseYear: '', categoriaId: null };
   } catch (error) {
     mensaje.value = 'Error al crear el ítem o asociar la categoría.';
