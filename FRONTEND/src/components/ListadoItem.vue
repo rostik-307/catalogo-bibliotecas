@@ -41,7 +41,7 @@
                 <div>
                     <h2>Item Details</h2>
                 </div>
-                <table class="details-table">
+                <table>
                     <tr>
                         <td>ID:</td>
                         <td>{{ selectedItem.id }}</td>
@@ -60,7 +60,7 @@
                     </tr>
                     <tr>
                         <td>Categoría:</td>
-                        <td>{{ selectedItem.category }}</td>
+                        <td>{{ selectedItem.categoryName }}</td>
                     </tr>
                 </table>
             </div>
@@ -214,7 +214,7 @@ export default {
             updateItem,
             deleteItem,
             closeModal,
-            cancelEdit
+            cancelEdit,
         };
     }
 };
