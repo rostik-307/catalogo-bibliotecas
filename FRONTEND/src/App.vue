@@ -8,13 +8,10 @@ import HelloWorld from './components/HelloWorld.vue'
     <img alt="logo" class="logo" src="@/assets/icon.png" width="125" height="125" />
 
     <div class="wrapper">
-     
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/listado">Listado</RouterLink>
         <RouterLink to="/insertar">Insertar Item</RouterLink>
-        <RouterLink to="/"></RouterLink>
       </nav>
     </div>
   </header>

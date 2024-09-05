@@ -38,12 +38,31 @@
         <div v-if="showModal" class="modal" @click.self="closeModal">
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
-                <h2>Item Details</h2>
-                <p><strong>ID:</strong> {{ selectedItem.id }}</p>
-                <p><strong>Nombre:</strong> {{ selectedItem.name }}</p>
-                <p><strong>Descripción:</strong> {{ selectedItem.details }}</p>
-                <p><strong>Año:</strong> {{ selectedItem.releaseYear }}</p>
-                <p><strong>Categoría:</strong> {{ selectedItem.category }}</p>
+                <div>
+                    <h2>Item Details</h2>
+                </div>
+                <table class="details-table">
+                    <tr>
+                        <td>ID:</td>
+                        <td>{{ selectedItem.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre:</td>
+                        <td>{{ selectedItem.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Detalles:</td>
+                        <td>{{ selectedItem.details }}</td>
+                    </tr>
+                    <tr>
+                        <td>Año:</td>
+                        <td>{{ selectedItem.releaseYear }}</td>
+                    </tr>
+                    <tr>
+                        <td>Categoría:</td>
+                        <td>{{ selectedItem.category }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
 
@@ -51,7 +70,9 @@
         <!-- Formulario de edición -->
         <div v-if="showEditForm" class="edit-form modal">
             <div class="modal-content">
-                <h2>Editar Item</h2>
+                <span>
+                    <h2>Editar Item</h2>
+                </span>
                 <form @submit.prevent="updateItem">
                     <label for="name">Nombre:</label>
                     <input type="text" v-model="selectedItem.name" id="name" required>
