@@ -75,24 +75,21 @@
                     <h2>Editar Item</h2>
                 </span>
                 <form @submit.prevent="updateItem">
-                    <label for="name">Nombre:</label>
+                    <label for="name">Nombre:</label>   
                     <input type="text" v-model="selectedItem.name" id="name" required>
-    
+
                     <label for="details">Detalles:</label>
                     <input type="text" v-model="selectedItem.details" id="details" required>
-    
+
                     <label for="releaseYear">Año:</label>
                     <input type="number" v-model="selectedItem.releaseYear" id="releaseYear" required>
-    
+
                     <label for="category">Categoría:</label>
-                    <select v-model="selectedCategoryId" id="category" required>
+                    <select v-model="selectedItem.categoryId" id="category" required>
                         <option v-for="category in categories" :key="category.id" :value="category.id">
                             {{ category.name }}
                         </option>
                     </select>
-    
-                    <button type="submit">Guardar</button>
-                    <button type="button" @click="cancelEdit">Cancelar</button>
                 </form>
             </div>
         </div>
