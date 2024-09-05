@@ -1,6 +1,6 @@
 <template>
   <div class="table-insert">
-    <h1>Insertar Nuevo Ítem</h1>
+    <h1>Insertar nuevo artículo</h1>
     <form @submit.prevent="crearItem">
 
       <div>
@@ -32,7 +32,7 @@
 
     <!-- Mostrar detalles del ítem creado -->
     <div v-if="itemCreado">
-      <h2>Ítem Creado</h2>
+      <h2>Artículo Creado</h2>
       <p><strong>ID:</strong> {{ itemCreado.id }}</p>
       <p><strong>Nombre:</strong> {{ itemCreado.name }}</p>
       <p><strong>Detalles:</strong> {{ itemCreado.details }}</p>
@@ -46,23 +46,20 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-// Variables reactivas
 const nuevoItem = ref({ name: '', details: '', releaseYear: '', categoriaId: null });
-const itemCreado = ref(null); // Almacena los datos del ítem creado
-const categorias = ref([]); // Almacena las categorías disponibles
-const mensaje = ref(''); // Almacena mensajes de éxito o error
+const itemCreado = ref(null);
+const categorias = ref([]);
+const mensaje = ref('');
 
-// Función para cargar las categorías desde el servidor
 const cargarCategorias = async () => {
   try {
     const response = await axios.get('/api/category');
-    categorias.value = response.data; // Cargar las categorías desde el backend
+    categorias.value = response.data;
   } catch (error) {
     console.error('Error al cargar las categorías:', error);
   }
 };
 
-// Función para crear el ítem y asociar la categoría seleccionada
 const crearItem = async () => {
   console.log("ID de la categoría seleccionada:", nuevoItem.value.categoriaId);
 
@@ -76,7 +73,7 @@ const crearItem = async () => {
       name: nuevoItem.value.name,
       details: nuevoItem.value.details,
       releaseYear: nuevoItem.value.releaseYear,
-      categoryId: nuevoItem.value.categoriaId // Enviamos solo el ID de la categoría
+      categoryId: nuevoItem.value.categoriaId
     };
 
 
@@ -95,10 +92,5 @@ const crearItem = async () => {
 };
 
 
-// Cargar las categorías cuando el componente se monta
 onMounted(cargarCategorias);
 </script>
-
-<style scoped>
-
-</style>

@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
@@ -11,7 +10,6 @@ import HelloWorld from './components/HelloWorld.vue'
       <nav>
         <RouterLink to="/">Página de inicio</RouterLink>
         <RouterLink to="/listado">Articulos</RouterLink>
-        <RouterLink to="/insertar">Insertar Item</RouterLink>
       </nav>
     </div>
   </header>

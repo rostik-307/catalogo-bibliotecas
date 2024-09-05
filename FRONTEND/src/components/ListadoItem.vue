@@ -1,6 +1,8 @@
 <template>
     <div>
         <h1><del>Listado</del> Catálogo de artículos</h1>
+        <RouterLink class="clear-router" to="/insertar"><button>Crear nuevo artículo</button></RouterLink>
+
 
         <!-- Caja de búsqueda por ID -->
         <input type="text" v-model="searchId" placeholder="Busqueda por Id" />
@@ -33,13 +35,12 @@
                 </tr>
             </tbody>
         </table>
-
         <!-- Modal para mostrar detalles del item -->
         <div v-if="showModal" class="modal" @click.self="closeModal">
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
                 <div>
-                    <h2>Item Details</h2>
+                    <h2>Detalles de artículo</h2>
                 </div>
                 <table>
                     <tr>
@@ -72,7 +73,7 @@
             <div class="modal-content">
                 <span class="close" @click="closeEditForm">&times;</span>
                 <span>
-                    <h2>Editar Item</h2>
+                    <h2>Editar Artículo</h2>
                 </span>
                 <form @submit.prevent="updateItem">
                     <label for="name">Nombre:</label>   
@@ -90,6 +91,7 @@
                             {{ category.name }}
                         </option>
                     </select>
+                    <button type="submit">Actualizar artículo</button>
                 </form>
             </div>
         </div>
