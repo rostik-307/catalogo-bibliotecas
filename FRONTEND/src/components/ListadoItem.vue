@@ -54,7 +54,7 @@
                 <div>
                     <h2>Detalles de artículo</h2>
                 </div>
-                <table>
+                <table class="details-table">
                     <tr>
                         <td>ID:</td>
                         <td>{{ selectedItem.id }}</td>
